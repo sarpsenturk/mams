@@ -42,3 +42,8 @@ app.use("/api", api(db_pool))
 app.listen(PORT, () => {
     console.log(`MAMS backend listening on port ${PORT}...`)
 })
+
+// Destroy mysql connection pool on exit
+process.on("exit", () => {
+    mysql.end()
+})

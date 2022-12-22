@@ -1,6 +1,6 @@
 import {Router} from "express";
 import {isAuthenticated} from "../middleware/is-authenticated.js";
-import isDoctor from "../middleware/is-doctor.js";
+import {isDoctor} from "../middleware/is-doctor.js";
 
 export default (database) => {
     // Create patient router
