@@ -33,6 +33,7 @@ const db_pool = mysql.createPool({
 
 // Create the application
 const app = express()
+app.use(express.json())
 
 // Set up /api route
 app.use("/api", api(db_pool))
