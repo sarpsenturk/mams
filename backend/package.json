@@ -2,9 +2,11 @@
   "name": "mams-backend",
   "version": "1.0.0",
   "description": "Backend component of mams",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "dev": "nodemon .",
     "test": "jest"
   },
   "repository": {
@@ -16,5 +18,11 @@
   "bugs": {
     "url": "https://github.com/sarpsenturk/mams/issues"
   },
-  "homepage": "https://github.com/sarpsenturk/mams#readme"
+  "homepage": "https://github.com/sarpsenturk/mams#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
