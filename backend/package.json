@@ -1,0 +1,20 @@
+{
+  "name": "mams-backend",
+  "version": "1.0.0",
+  "description": "Backend component of mams",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarpsenturk/mams.git"
+  },
+  "author": "Sarp Senturk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sarpsenturk/mams/issues"
+  },
+  "homepage": "https://github.com/sarpsenturk/mams#readme"
+}
