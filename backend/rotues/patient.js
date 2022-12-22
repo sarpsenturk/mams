@@ -1,6 +1,6 @@
 import {Router} from "express";
 
-export default () => {
+export default (database) => {
     // Create patient router
     const router = Router()
 
