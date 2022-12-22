@@ -27,7 +27,7 @@ export default (database) => {
         return res.status(200).send("Hello from /staff")
     })
 
-    router.post("/manager/create", [isAuthenticated, isAdmin], async (req, res) => {
+    router.post("/manager/create", isAuthenticated, isAdmin, async (req, res) => {
         try {
             // Validate manager data
             const {meeting_hours_begin, meeting_hours_end} = req.body
@@ -52,7 +52,7 @@ export default (database) => {
         }
     })
 
-    router.post("/doctor/create", [isAuthenticated, isAdmin], async (req, res) => {
+    router.post("/doctor/create", isAuthenticated, isAdmin, async (req, res) => {
         try {
             // Validate the doctor data
             const {room_number, employment_start, manager_id} = req.body
@@ -82,7 +82,7 @@ export default (database) => {
             const managerId = req.params["manager_id"]
             const [result] = await database.execute(
                 "SELECT staff.first_name, staff.last_name, staff.email," +
-                "manager.meeting_hours_begin, manager.meeting_hours_end FROM staff" +
+                "manager.meeting_hours_begin, manager.meeting_hours_end FROM staff " +
                 "INNER JOIN manager ON staff.staff_id = manager.manager_id WHERE staff.staff_id = ?", [managerId])
             if (result.length === 0) {
                 return res.status(404).json({err: `Manager with id ${managerId} not found`})
@@ -98,8 +98,8 @@ export default (database) => {
         try {
             const doctorId = req.params["doctor_id"]
             const [result] = await database.execute(
-                "SELECT staff.first_name, staff.last_name, staff.email," +
-                "doctor.room_number, doctor.employment_start, doctor.manager_id FROM staff" +
+                "SELECT staff.first_name, staff.last_name, staff.email, " +
+                "doctor.room_number, doctor.employment_start, doctor.manager_id FROM staff " +
                 "INNER JOIN doctor ON staff.staff_id = doctor.doctor_id WHERE staff.staff_id = ?", [doctorId])
             if (result.length === 0) {
                 return res.status(404).json({err: `Doctor with id ${doctorId} not found`})
