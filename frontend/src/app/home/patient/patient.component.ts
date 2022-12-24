@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-patient',
@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./patient.component.scss']
 })
 export class PatientComponent {
+  activeLink: string = ''
+  links = ['search', 'create']
 
+  constructor() {
+  }
 }
