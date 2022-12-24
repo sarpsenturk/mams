@@ -5,6 +5,15 @@ const routes: Routes = [
   {
     path: 'auth',
     loadComponent: () => import('./auth/auth.component').then(c => c.AuthComponent)
+  },
+  {
+    path: 'home',
+    loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'home'
   }
 ];
 

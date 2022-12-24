@@ -1,0 +1,12 @@
+#home-content {
+  display: flex;
+  flex-direction: column;
+}
+
+#home-content-main {
+  flex: 1 0 auto;
+}
+
+#sidenav-content {
+  padding: 1rem;
+}
