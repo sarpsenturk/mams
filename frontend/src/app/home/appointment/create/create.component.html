@@ -1,0 +1,25 @@
+<form class="mat-elevation-z4">
+  <h3>Create Appointment</h3>
+  <mat-form-field class="full-width">
+    <mat-label>Select Patient</mat-label>
+    <input matInput type="text">
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Select Doctor</mat-label>
+    <input matInput type="text">
+  </mat-form-field>
+  <div class="form-group">
+    <mat-form-field>
+      <mat-label>Select Date</mat-label>
+      <input matInput [matDatepicker]="picker">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Select Time</mat-label>
+      <input matInput>
+    </mat-form-field>
+  </div>
+  <button mat-raised-button color="primary" class="full-width">Create</button>
+</form>

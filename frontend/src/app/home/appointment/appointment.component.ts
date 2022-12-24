@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./appointment.component.scss']
 })
 export class AppointmentComponent {
-
+  public activeLink = ''
+  public links = [
+    'create',
+    'search',
+    'schedule'
+  ]
 }

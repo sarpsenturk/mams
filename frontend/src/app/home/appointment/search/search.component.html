@@ -1,0 +1,58 @@
+<form class="mat-elevation-z4">
+  <h3>Search For Appointment</h3>
+  <mat-form-field class="full-width">
+    <mat-label>Patient Name</mat-label>
+    <input matInput>
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Doctor Name</mat-label>
+    <input matInput>
+  </mat-form-field>
+  <mat-form-field class="full-width">
+    <mat-label>Scheduled Date</mat-label>
+    <input matInput [matDatepicker]="searchPicker">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="searchPicker"></mat-datepicker-toggle>
+    <mat-datepicker #searchPicker></mat-datepicker>
+  </mat-form-field>
+</form>
+
+<div id="result-table" class="mat-elevation-z4">
+  <h3>Search Results:</h3>
+  <div>
+    <table mat-table [dataSource]="results" *ngIf="results.length !== 0">
+      <ng-container matColumnDef="appointment_id">
+        <th mat-header-cell *matHeaderCellDef>Appointment ID</th>
+        <td mat-cell *matCellDef="let appointment">{{appointment['appointment_id']}}</td>
+      </ng-container>
+      <ng-container matColumnDef="doctor">
+        <th mat-header-cell *matHeaderCellDef>Doctor</th>
+        <td mat-cell *matCellDef="let appointment">
+          {{appointment['doctor_first_name'] + ' ' + appointment['doctor_last_name']}}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="room_number">
+        <th mat-header-cell *matHeaderCellDef>Room Number</th>
+        <td mat-cell *matCellDef="let appointment">{{appointment['room_number']}}</td>
+      </ng-container>
+      <ng-container matColumnDef="date_time">
+        <th mat-header-cell *matHeaderCellDef>Date-Time</th>
+        <td mat-cell *matCellDef="let appointment">{{appointment['date_time']}}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let appointment">
+          <button mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+      <tr mat-row *matRowDef="let rowData; columns: displayColumns;"></tr>
+    </table>
+  </div>
+</div>
+
