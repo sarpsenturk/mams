@@ -19,10 +19,10 @@
     Search
   </button>
 </form>
-<div id="result-table">
+<div id="result-table" *ngIf="results.length !== 0">
   <h3>Found {{results.length}} staff:</h3>
   <div>
-    <table mat-table [dataSource]="results" *ngIf="results.length !== 0">
+    <table mat-table [dataSource]="results">
       <ng-container matColumnDef="staff_id">
         <th mat-header-cell *matHeaderCellDef>Staff ID</th>
         <td mat-cell *matCellDef="let staff">{{staff['staff_id']}}</td>

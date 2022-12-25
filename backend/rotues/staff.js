@@ -39,7 +39,7 @@ export default (database) => {
             await database.execute(
                 "INSERT INTO manager (manager_id, meeting_hours_begin, meeting_hours_end) VALUES (?, ?, ?)",
                 [insertId, meeting_hours_begin, meeting_hours_end])
-            return res.status(201).json({result: {staffID: insertId}})
+            return res.status(201).json({result: {staffId: insertId}})
         } catch (err) {
             if (err.code === "ER_DUP_ENTRY") {
                 return res.status(409).json({msg: "Email is already in use"})
@@ -64,7 +64,7 @@ export default (database) => {
             await database.execute(
                 "INSERT INTO doctor (doctor_id, room_number, employment_start, manager_id) VALUES (?, ?, ?, ?)",
                 [insertId, room_number, employment_start, manager_id])
-            return res.status(201).json({result: {staffID: insertId}})
+            return res.status(201).json({result: {staffId: insertId}})
         } catch (err) {
             if (err.code === "ER_DUP_ENTRY") {
                 return res.status(409).json({msg: "Email is already in use"})

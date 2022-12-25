@@ -21,6 +21,14 @@ export class StaffService {
     ).pipe(map(response => response.result))
   }
 
+  public create(params: any, type: string) {
+    return this.http.post<IAPIResult<{ staffId: number }>>(
+      `${environment.apiUrl}/staff/${type}/create`,
+      params,
+      {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${this.auth.authToken}`}}
+    ).pipe(map(response => response.result))
+  }
+
   public delete(staffId: number) {
     return this.http.delete(
       `${environment.apiUrl}/staff/${staffId}`,
