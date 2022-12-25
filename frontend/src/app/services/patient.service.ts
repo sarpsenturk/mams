@@ -29,7 +29,7 @@ export class PatientService {
   public delete(patientId: number) {
     return this.http.delete(
       `${environment.apiUrl}/patient/${patientId}`,
-      {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${this.auth.authToken}`}}
+      {headers: {'Authorization': `Bearer ${this.auth.authToken}`}}
     )
   }
 

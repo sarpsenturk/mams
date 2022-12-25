@@ -2,6 +2,7 @@ import {Router} from "express";
 import bcrypt from "bcrypt"
 import {isAuthenticated} from "../middleware/is-authenticated.js";
 import {isAdmin} from "../middleware/is-admin.js";
+import {createWhereClause} from "../utils/create-where-clause.js";
 
 export default (database) => {
     // Create staff router
@@ -23,16 +24,12 @@ export default (database) => {
     }
 
     // Setup staff routes
-    router.get("/", (req, res) => {
-        return res.status(200).send("Hello from /staff")
-    })
-
     router.post("/manager/create", isAuthenticated, isAdmin, async (req, res) => {
         try {
             // Validate manager data
             const {meeting_hours_begin, meeting_hours_end} = req.body
             if (!meeting_hours_begin || !meeting_hours_end) {
-                return res.status(400).json({err: "Missing required information to create manager"})
+                return res.status(400).json({msg: "Missing required information to create manager"})
             }
 
             // Create the user
@@ -45,7 +42,7 @@ export default (database) => {
             return res.status(201).json({result: {staffID: insertId}})
         } catch (err) {
             if (err.code === "ER_DUP_ENTRY") {
-                return res.status(409).json({err: "Email is already in use"})
+                return res.status(409).json({msg: "Email is already in use"})
             }
             console.error(err)
             return res.status(500).json(err)
@@ -57,7 +54,7 @@ export default (database) => {
             // Validate the doctor data
             const {room_number, employment_start, manager_id} = req.body
             if (!room_number || !employment_start || !manager_id) {
-                return res.status(400).json({err: "Missing required information to create doctor"})
+                return res.status(400).json({msg: "Missing required information to create doctor"})
             }
 
             // Create the user
@@ -70,12 +67,43 @@ export default (database) => {
             return res.status(201).json({result: {staffID: insertId}})
         } catch (err) {
             if (err.code === "ER_DUP_ENTRY") {
-                return res.status(409).json({err: "Email is already in use"})
+                return res.status(409).json({msg: "Email is already in use"})
             }
             console.error(err)
             return res.status(500).json(err)
         }
     })
+
+    router.get("/search", isAuthenticated, isAdmin, async (req, res) => {
+        const query = `SELECT staff_id, first_name, last_name, email, is_admin
+                       FROM staff ${createWhereClause(req.query, database)}`
+        try {
+            console.log(query)
+            const [result] = await database.query(query)
+            return res.status(200).json({result})
+        } catch (err) {
+            console.error(err)
+            return res.status(500).json(err)
+        }
+    })
+
+    router.delete("/:staff_id", isAuthenticated, isAdmin, async (req, res) => {
+        try {
+            const patientId = req.params["staff_id"]
+            if (!patientId) {
+                return res.status(400).json({msg: "Missing staff ID"})
+            }
+            const [result] = await database.execute(
+                'DELETE FROM staff WHERE staff_id = ?',
+                [patientId])
+            const status = result.rowsAffected === 0 ? 204 : 202
+            return res.status(status).send()
+        } catch (err) {
+            console.error(err)
+            return res.status(500).json({err})
+        }
+    })
+
 
     router.get("/manager/:manager_id", isAuthenticated, async (req, res) => {
         try {
@@ -85,7 +113,7 @@ export default (database) => {
                 "manager.meeting_hours_begin, manager.meeting_hours_end FROM staff " +
                 "INNER JOIN manager ON staff.staff_id = manager.manager_id WHERE staff.staff_id = ?", [managerId])
             if (result.length === 0) {
-                return res.status(404).json({err: `Manager with id ${managerId} not found`})
+                return res.status(404).json({msg: `Manager with id ${managerId} not found`})
             }
             return res.status(200).json({result: {manager: result[0]}})
         } catch (err) {
@@ -93,7 +121,6 @@ export default (database) => {
             return res.status(500).json({err})
         }
     })
-
 
     router.get("/doctor/from_name", isAuthenticated, async (req, res) => {
         const name = database.escape(`%${req.query['name']}%`)

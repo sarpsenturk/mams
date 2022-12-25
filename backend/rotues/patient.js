@@ -46,7 +46,7 @@ export default (database) => {
         }
     })
 
-    router.get("/from_name", isAuthenticated, async (req, res) => {
+    router.get("/from_name", async (req, res) => {
         const name = database.escape(`%${req.query['name']}%`)
         try {
             const [result] = await database.query(
@@ -60,11 +60,11 @@ export default (database) => {
         }
     })
 
-    router.delete("/:patient_id", isAuthenticated, async (req, res) => {
+    router.delete("/:patient_id", async (req, res) => {
         try {
             const patientId = req.params["patient_id"]
             if (!patientId) {
-                return res.status(400).json({msg: "Missing appointment ID"})
+                return res.status(400).json({msg: "Missing patient ID"})
             }
             const [result] = await database.execute(
                 'DELETE FROM patient WHERE patient_id = ?',

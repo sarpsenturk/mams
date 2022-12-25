@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent {
-
+  activeLink = ''
+  links = ['create-staff', 'search-staff']
 }
