@@ -76,9 +76,10 @@ export class CreateComponent {
       next: value => {
         this.notification.notify(`Created appointment with ID ${value.appointmentId}`)
       },
-      error: err => {
-        console.error(err)
-        this.notification.notify("Failed to create appointment")
+      error: httpError => {
+        const {error} = httpError
+        if (error['msg'])
+          this.notification.notify(`Error: ${error['msg']}`)
       }
     })
   }

@@ -38,6 +38,11 @@ export class SearchComponent {
         if (appointments.length === 0) {
           this.notification.notify('No appointments matching search was found')
         }
+      },
+      error: httpError => {
+        const {error} = httpError
+        if (error['msg'])
+          this.notification.notify(`Error: ${error['msg']}`)
       }
     })
   }

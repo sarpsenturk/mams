@@ -17,6 +17,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {NgxMatTimepickerModule} from "ngx-mat-timepicker";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import {NgxMatTimepickerModule} from "ngx-mat-timepicker";
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMatTimepickerModule
+    NgxMatTimepickerModule,
+    MatAutocompleteModule
   ]
 })
 export class AdminModule {

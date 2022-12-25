@@ -42,6 +42,15 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
+      <mat-form-field>
+        <mat-label>Select Manager</mat-label>
+        <input matInput [matAutocomplete]="managerAutocomplete" formControlName="manager">
+        <mat-autocomplete #managerAutocomplete [displayWith]="renderManager">
+          <mat-option *ngFor="let manager of filteredManagers | async" [value]="manager">
+            {{manager.first_name}} {{manager.last_name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
     </div>
   </div>
   <div formGroupName="manager" *ngIf="selectedStaffType === 'manager'">

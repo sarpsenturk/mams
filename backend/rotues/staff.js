@@ -78,7 +78,6 @@ export default (database) => {
         const query = `SELECT staff_id, first_name, last_name, email, is_admin
                        FROM staff ${createWhereClause(req.query, database)}`
         try {
-            console.log(query)
             const [result] = await database.query(query)
             return res.status(200).json({result})
         } catch (err) {
@@ -104,29 +103,26 @@ export default (database) => {
         }
     })
 
-
-    router.get("/manager/:manager_id", isAuthenticated, async (req, res) => {
-        try {
-            const managerId = req.params["manager_id"]
-            const [result] = await database.execute(
-                "SELECT staff.first_name, staff.last_name, staff.email," +
-                "manager.meeting_hours_begin, manager.meeting_hours_end FROM staff " +
-                "INNER JOIN manager ON staff.staff_id = manager.manager_id WHERE staff.staff_id = ?", [managerId])
-            if (result.length === 0) {
-                return res.status(404).json({msg: `Manager with id ${managerId} not found`})
-            }
-            return res.status(200).json({result: {manager: result[0]}})
-        } catch (err) {
-            console.error(err)
-            return res.status(500).json({err})
-        }
-    })
-
     router.get("/doctor/from_name", isAuthenticated, async (req, res) => {
         const name = database.escape(`%${req.query['name']}%`)
         const query = `SELECT doctor_id, room_number, s.first_name, s.last_name
                        FROM doctor
                                 INNER JOIN staff s ON doctor_id = s.staff_id
+                       WHERE CONCAT(first_name, ' ', last_name) LIKE ${name}`
+        try {
+            const [result] = await database.query(query)
+            return res.status(200).json({result})
+        } catch (err) {
+            console.error(err)
+            return res.status(500).json(err)
+        }
+    })
+
+    router.get("/manager/from_name", isAuthenticated, async (req, res) => {
+        const name = database.escape(`%${req.query['name']}%`)
+        const query = `SELECT manager_id, meeting_hours_begin, meeting_hours_end, s.first_name, s.last_name
+                       FROM manager
+                                INNER JOIN staff s ON manager.manager_id = s.staff_id
                        WHERE CONCAT(first_name, ' ', last_name) LIKE ${name}`
         try {
             const [result] = await database.query(query)

@@ -45,7 +45,11 @@ export class SearchComponent {
           if (patients.length === 0)
             this.notification.notify("No patients matching search was found")
         },
-        error: err => console.error(err)
+        error: httpError => {
+          const {error} = httpError
+          if (error['msg'])
+            this.notification.notify(`Error: ${error['msg']}`)
+        }
       })
   }
 
