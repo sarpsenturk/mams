@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {Patient} from "../../../interfaces/patient";
+import {PatientService} from "../../../services/patient.service";
+import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-search',
@@ -6,24 +9,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent {
-  public results = [
-    {
-      patient_id: 1,
-      first_name: "Sarp",
-      last_name: "Senturk",
-      contact_phone: "5345234766",
-      contact_email: "sarpsenturk38@gmail.com",
-      birthdate: "2001-12-11"
-    },
-    {
-      patient_id: 2,
-      first_name: "Alp",
-      last_name: "Senturk",
-      contact_phone: "5325980033",
-      contact_email: "tolga@drtolgasenturk.com",
-      birthdate: "2014-04-01"
-    }
-  ]
+  constructor(private patient: PatientService,
+              private fb: FormBuilder) {
+  }
+
+  searchForm = this.fb.group({
+    first_name: '',
+    last_name: '',
+    contact_phone: '',
+    contact_email: ''
+  })
+
+  public results: Patient[] = []
   public displayColumns = [
     'patient_id',
     'first_name',
@@ -33,4 +30,18 @@ export class SearchComponent {
     'birthdate',
     'actions'
   ]
+
+  get firstName() {
+    return this.searchForm.get('firstName')
+  }
+
+  public onSubmit() {
+    const values = this.searchForm.value
+    this.patient.search(values.first_name!,
+      values.last_name!, values.contact_phone!, values.contact_email!)
+      .subscribe({
+        next: patients => this.results = patients,
+        error: err => console.error(err)
+      })
+  }
 }

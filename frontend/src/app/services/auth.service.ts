@@ -6,6 +6,7 @@ import {map} from "rxjs/operators"
 import {User} from "../interfaces/user";
 import {IAPIResult} from "../interfaces/api";
 import {Router} from "@angular/router";
+import {NotificationService} from "./notification.service";
 
 @Injectable({
   providedIn: 'root',
@@ -15,9 +16,15 @@ export class AuthService {
   private token: string | null;
   private userSubject = new ReplaySubject<User | null>()
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient,
+              private router: Router,
+              private notification: NotificationService) {
     this.token = localStorage.getItem(AuthService.TOKEN_STORAGE_NAME)
     this.getUserWithToken()
+  }
+
+  public get authToken() {
+    return this.token
   }
 
   public get user() {
@@ -39,6 +46,7 @@ export class AuthService {
         this.token = token
         localStorage.setItem(AuthService.TOKEN_STORAGE_NAME, token)
         this.getUserWithToken()
+        this.notification.notify('Logged in')
         return token
       })
     )
@@ -49,6 +57,7 @@ export class AuthService {
     localStorage.removeItem(AuthService.TOKEN_STORAGE_NAME)
     this.userSubject.next(null)
     this.router.navigate(['/auth'])
+    this.notification.notify('Logged out')
   }
 
   private getUserWithToken() {

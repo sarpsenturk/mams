@@ -19,7 +19,7 @@ export default (database) => {
             // Validate patient data
             const {first_name, last_name, contact_phone, contact_email, birthdate} = req.body
             if (!first_name || !last_name || !contact_phone || !contact_email || !birthdate) {
-                return res.status(400).json({err: "Missing required information to create patient"})
+                return res.status(400).json({msg: "Missing required information to create patient"})
             }
 
             // Create the patient
@@ -33,6 +33,26 @@ export default (database) => {
         }
     })
 
+    router.get("/search", async (req, res) => {
+        let query = 'SELECT * FROM patient '
+        if (Object.keys(req.query).length !== 0) {
+            query += 'WHERE '
+            for (let [k, v] of Object.entries(req.query)) {
+                if (v)
+                    query += `${database.escapeId(k)} = ${database.escape(v)} AND `
+            }
+        }
+        // Remove trailing 'AND '
+        query = query.substring(0, query.length - 4)
+        try {
+            const [results] = await database.query(query)
+            return res.status(200).json({result: results})
+        } catch (err) {
+            console.error(err)
+            return res.status(500).json(err)
+        }
+    })
+
     router.get("/:patient_id", async (req, res) => {
         try {
             const patientId = req.params["patient_id"]
@@ -40,7 +60,7 @@ export default (database) => {
                 "SELECT first_name, last_name, contact_phone, contact_email, birthdate FROM patient WHERE patient_id = ?",
                 [patientId])
             if (patients.length === 0) {
-                return res.status(404).json({err: `No patient with id ${patientId} found`})
+                return res.status(404).json({msg: `No patient with id ${patientId} found`})
             }
             return res.status(200).json({result: {patient: patients[0]}})
         } catch (err) {

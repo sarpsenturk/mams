@@ -12,6 +12,7 @@ import {MatNativeDateModule} from "@angular/material/core";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTableModule} from "@angular/material/table";
 import {MatIconModule} from "@angular/material/icon";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -29,8 +30,9 @@ import {MatIconModule} from "@angular/material/icon";
     MatNativeDateModule,
     MatButtonModule,
     MatTableModule,
-    MatIconModule
-  ]
+    MatIconModule,
+    ReactiveFormsModule
+  ],
 })
 export class PatientModule {
 }
