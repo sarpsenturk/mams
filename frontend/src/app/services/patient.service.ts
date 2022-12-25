@@ -26,21 +26,30 @@ export class PatientService {
     ).pipe(map(response => response.result))
   }
 
-  public search(first_name: string,
-                last_name: string,
-                contact_phone: string,
-                contact_email: string) {
-    let params = new HttpParams().appendAll({
-      'first_name': first_name,
-      'last_name': last_name,
-      'contact_phone': contact_phone,
-      'contact_email': contact_email
-    })
+  public delete(patientId: number) {
+    return this.http.delete(
+      `${environment.apiUrl}/patient/${patientId}`,
+      {headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${this.auth.authToken}`}}
+    )
+  }
+
+  public search(query: any) {
+    let params = new HttpParams().appendAll(query)
     return this.http.get<IAPIResult<Patient[]>>(`${environment.apiUrl}/patient/search`,
       {
         headers: {'Authorization': `Bearer ${this.auth.authToken}`},
         params
       }
     ).pipe(map(response => response.result))
+  }
+
+  public fromName(fullName: string) {
+    const params = new HttpParams().set('name', fullName)
+    return this.http.get<IAPIResult<Patient[]>>(
+      `${environment.apiUrl}/patient/from_name`,
+      {headers: {'Authorization': `Bearer ${this.auth.authToken}`}, params}
+    ).pipe(
+      map(response => response.result)
+    )
   }
 }

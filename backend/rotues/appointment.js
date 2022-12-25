@@ -66,24 +66,17 @@ export default (database) => {
         }
     })
 
-    router.get("/:appointment_id", async (req, res) => {
+    router.delete("/:appointment_id", async (req, res) => {
         try {
             const appointmentId = req.params["appointment_id"]
-            const [result] = await database.execute(
-                "SELECT a.appointment_id, " +
-                "a.date_time, " +
-                "s.first_name AS doctor_first_name, s.last_name AS doctor_last_name, " +
-                "d.room_number " +
-                "FROM appointment a " +
-                "INNER JOIN staff s ON s.staff_id = a.doctor_id " +
-                "INNER JOIN doctor d ON d.doctor_id = a.doctor_id " +
-                "WHERE a.appointment_id = ?",
-                [appointmentId]
-            )
-            if (result.length === 0) {
-                return res.status(404).json({err: `No appointment with id ${appointmentId} found`})
+            if (!appointmentId) {
+                return res.status(400).json({msg: "Missing appointment ID"})
             }
-            return res.status(200).json({result: {appointment: result[0]}})
+            const [result] = await database.execute(
+                'DELETE FROM appointment WHERE appointment_id = ?',
+                [appointmentId])
+            const status = result.rowsAffected === 0 ? 204 : 202
+            return res.status(status).send()
         } catch (err) {
             console.error(err)
             return res.status(500).json({err})

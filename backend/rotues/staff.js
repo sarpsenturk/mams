@@ -94,20 +94,19 @@ export default (database) => {
         }
     })
 
-    router.get("/doctor/:doctor_id", isAuthenticated, async (req, res) => {
+
+    router.get("/doctor/from_name", isAuthenticated, async (req, res) => {
+        const name = database.escape(`%${req.query['name']}%`)
+        const query = `SELECT doctor_id, room_number, s.first_name, s.last_name
+                       FROM doctor
+                                INNER JOIN staff s ON doctor_id = s.staff_id
+                       WHERE CONCAT(first_name, ' ', last_name) LIKE ${name}`
         try {
-            const doctorId = req.params["doctor_id"]
-            const [result] = await database.execute(
-                "SELECT staff.first_name, staff.last_name, staff.email, " +
-                "doctor.room_number, doctor.employment_start, doctor.manager_id FROM staff " +
-                "INNER JOIN doctor ON staff.staff_id = doctor.doctor_id WHERE staff.staff_id = ?", [doctorId])
-            if (result.length === 0) {
-                return res.status(404).json({err: `Doctor with id ${doctorId} not found`})
-            }
-            return res.status(200).json({result: {manager: result[0]}})
+            const [result] = await database.query(query)
+            return res.status(200).json({result})
         } catch (err) {
             console.error(err)
-            return res.status(500).json({err})
+            return res.status(500).json(err)
         }
     })
 

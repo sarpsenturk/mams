@@ -31,12 +31,18 @@
 </form>
 
 <div id="result-table" class="mat-elevation-z4" *ngIf="results.length !== 0">
-  <h3>Found {{results.length}} appointments:</h3>
+  <h3>Found {{results.length}} appointment(s):</h3>
   <div>
     <table mat-table [dataSource]="results" *ngIf="results.length !== 0">
       <ng-container matColumnDef="appointment_id">
         <th mat-header-cell *matHeaderCellDef>Appointment ID</th>
         <td mat-cell *matCellDef="let appointment">{{appointment['appointment_id']}}</td>
+      </ng-container>
+      <ng-container matColumnDef="patient">
+        <th mat-header-cell *matHeaderCellDef>Patient</th>
+        <td mat-cell *matCellDef="let appointment">
+          {{appointment['patient_first_name']}} {{appointment['patient_last_name']}}
+        </td>
       </ng-container>
       <ng-container matColumnDef="doctor">
         <th mat-header-cell *matHeaderCellDef>Doctor</th>
@@ -55,10 +61,7 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let appointment">
-          <button mat-icon-button>
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn">
+          <button mat-icon-button color="warn" (click)="delete(appointment)">
             <mat-icon>delete</mat-icon>
           </button>
         </td>

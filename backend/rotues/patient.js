@@ -35,7 +35,8 @@ export default (database) => {
     })
 
     router.get("/search", async (req, res) => {
-        const query = `SELECT * FROM patient ${createWhereClause(req.query, database)}`
+        const query = `SELECT *
+                       FROM patient ${createWhereClause(req.query, database)}`
         try {
             const [results] = await database.query(query)
             return res.status(200).json({result: results})
@@ -45,16 +46,31 @@ export default (database) => {
         }
     })
 
-    router.get("/:patient_id", async (req, res) => {
+    router.get("/from_name", isAuthenticated, async (req, res) => {
+        const name = database.escape(`%${req.query['name']}%`)
+        try {
+            const [result] = await database.query(
+                `SELECT *
+                 FROM patient
+                 WHERE CONCAT(first_name, ' ', last_name) LIKE ${name}`)
+            return res.status(200).json({result})
+        } catch (err) {
+            console.error(err)
+            return res.status(500).json(err)
+        }
+    })
+
+    router.delete("/:patient_id", isAuthenticated, async (req, res) => {
         try {
             const patientId = req.params["patient_id"]
-            const [patients] = await database.execute(
-                "SELECT first_name, last_name, contact_phone, contact_email, birthdate FROM patient WHERE patient_id = ?",
-                [patientId])
-            if (patients.length === 0) {
-                return res.status(404).json({msg: `No patient with id ${patientId} found`})
+            if (!patientId) {
+                return res.status(400).json({msg: "Missing appointment ID"})
             }
-            return res.status(200).json({result: {patient: patients[0]}})
+            const [result] = await database.execute(
+                'DELETE FROM patient WHERE patient_id = ?',
+                [patientId])
+            const status = result.rowsAffected === 0 ? 204 : 202
+            return res.status(status).send()
         } catch (err) {
             console.error(err)
             return res.status(500).json({err})

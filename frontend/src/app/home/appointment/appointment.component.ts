@@ -8,7 +8,7 @@ import {Component} from '@angular/core';
 export class AppointmentComponent {
   public activeLink = ''
   public links = [
+    'search',
     'create',
-    'search'
   ]
 }

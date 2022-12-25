@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Patient} from "../../../interfaces/patient";
 import {PatientService} from "../../../services/patient.service";
 import {FormBuilder} from "@angular/forms";
+import {NotificationService} from "../../../services/notification.service";
 
 @Component({
   selector: 'app-search',
@@ -10,6 +11,7 @@ import {FormBuilder} from "@angular/forms";
 })
 export class SearchComponent {
   constructor(private patient: PatientService,
+              private notification: NotificationService,
               private fb: FormBuilder) {
   }
 
@@ -36,12 +38,24 @@ export class SearchComponent {
   }
 
   public onSubmit() {
-    const values = this.searchForm.value
-    this.patient.search(values.first_name!,
-      values.last_name!, values.contact_phone!, values.contact_email!)
+    this.patient.search(this.searchForm.value)
       .subscribe({
-        next: patients => this.results = patients,
+        next: patients => {
+          this.results = patients
+          if (patients.length === 0)
+            this.notification.notify("No patients matching search was found")
+        },
         error: err => console.error(err)
       })
+  }
+
+  public delete(patient: Patient) {
+    const patientId = patient.patient_id
+    this.patient.delete(patientId).subscribe({
+      next: () => {
+        this.notification.notify(`Deleted patient with ID ${patientId}`)
+        this.onSubmit()
+      }
+    })
   }
 }
