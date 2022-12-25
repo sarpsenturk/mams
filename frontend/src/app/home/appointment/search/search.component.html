@@ -1,24 +1,37 @@
-<form class="mat-elevation-z4">
+<form class="mat-elevation-z4" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
   <h3>Search For Appointment</h3>
-  <mat-form-field class="full-width">
-    <mat-label>Patient Name</mat-label>
-    <input matInput>
-  </mat-form-field>
-  <mat-form-field class="full-width">
-    <mat-label>Doctor Name</mat-label>
-    <input matInput>
-  </mat-form-field>
+  <div class="form-group">
+    <mat-form-field class="full-width" formGroupName="patient">
+      <mat-label>Patient First Name</mat-label>
+      <input matInput formControlName="first_name">
+    </mat-form-field>
+    <mat-form-field class="full-width" formGroupName="patient">
+      <mat-label>Patient Last Name</mat-label>
+      <input matInput formControlName="last_name">
+    </mat-form-field>
+  </div>
+  <div class="form-group">
+    <mat-form-field class="full-width" formGroupName="doctor">
+      <mat-label>Doctor First Name</mat-label>
+      <input matInput formControlName="first_name">
+    </mat-form-field>
+    <mat-form-field class="full-width" formGroupName="doctor">
+      <mat-label>Doctor Last Name</mat-label>
+      <input matInput formControlName="last_name">
+    </mat-form-field>
+  </div>
   <mat-form-field class="full-width">
     <mat-label>Scheduled Date</mat-label>
-    <input matInput [matDatepicker]="searchPicker">
+    <input matInput [matDatepicker]="searchPicker" formControlName="date">
     <mat-hint>MM/DD/YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="searchPicker"></mat-datepicker-toggle>
     <mat-datepicker #searchPicker></mat-datepicker>
   </mat-form-field>
+  <button mat-raised-button color="primary" class="full-width" type="submit">Search</button>
 </form>
 
-<div id="result-table" class="mat-elevation-z4">
-  <h3>Search Results:</h3>
+<div id="result-table" class="mat-elevation-z4" *ngIf="results.length !== 0">
+  <h3>Found {{results.length}} appointments:</h3>
   <div>
     <table mat-table [dataSource]="results" *ngIf="results.length !== 0">
       <ng-container matColumnDef="appointment_id">

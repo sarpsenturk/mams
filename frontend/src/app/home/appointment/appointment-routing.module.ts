@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AppointmentComponent} from './appointment.component';
 import {CreateComponent} from "./create/create.component";
-import {ScheduleComponent} from "./schedule/schedule.component";
 import {SearchComponent} from "./search/search.component";
 
 const routes: Routes = [
@@ -15,17 +14,13 @@ const routes: Routes = [
         component: CreateComponent,
       },
       {
-        path: 'schedule',
-        component: ScheduleComponent,
-      },
-      {
         path: 'search',
         component: SearchComponent
       },
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'schedule'
+        redirectTo: 'search'
       }
     ]
   }];

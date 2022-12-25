@@ -1,6 +1,7 @@
 import {Router} from "express";
 import {isAuthenticated} from "../middleware/is-authenticated.js";
 import {isDoctor} from "../middleware/is-doctor.js";
+import {createWhereClause} from "../utils/create-where-clause.js";
 
 export default (database) => {
     // Create patient router
@@ -34,16 +35,7 @@ export default (database) => {
     })
 
     router.get("/search", async (req, res) => {
-        let query = 'SELECT * FROM patient '
-        if (Object.keys(req.query).length !== 0) {
-            query += 'WHERE '
-            for (let [k, v] of Object.entries(req.query)) {
-                if (v)
-                    query += `${database.escapeId(k)} = ${database.escape(v)} AND `
-            }
-        }
-        // Remove trailing 'AND '
-        query = query.substring(0, query.length - 4)
+        const query = `SELECT * FROM patient ${createWhereClause(req.query, database)}`
         try {
             const [results] = await database.query(query)
             return res.status(200).json({result: results})

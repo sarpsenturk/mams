@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-appointment',
@@ -9,7 +9,6 @@ export class AppointmentComponent {
   public activeLink = ''
   public links = [
     'create',
-    'search',
-    'schedule'
+    'search'
   ]
 }

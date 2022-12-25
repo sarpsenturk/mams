@@ -1,6 +1,7 @@
 import {Router} from "express";
 import {isAuthenticated} from "../middleware/is-authenticated.js";
 import {isDoctor} from "../middleware/is-doctor.js";
+import {createWhereClause} from "../utils/create-where-clause.js";
 
 export default (database) => {
     // Create appointment router
@@ -21,6 +22,47 @@ export default (database) => {
         } catch (err) {
             console.error(err)
             return res.status(500).json({err})
+        }
+    })
+
+    router.get("/search", async (req, res) => {
+        let patient = {}
+        if (req.query.first_name[0])
+            patient['first_name'] = req.query.first_name[0]
+        if (req.query.last_name[0])
+            patient['last_name'] = req.query.last_name[0]
+        let doctor = {}
+        if (req.query.first_name[1])
+            doctor['first_name'] = req.query.first_name[1]
+        if (req.query.last_name[1])
+            doctor['last_name'] = req.query.last_name[1]
+        const date = req.query.date ? {date_time: req.query.date} : {}
+
+        const patientWhere = createWhereClause(patient, database, 'p.', true, false)
+        const doctorWhere = createWhereClause(doctor, database, 's.', true, false)
+        const dateWhere = createWhereClause(date, database, '', true, false)
+        const whereClause = `${patientWhere}${doctorWhere}${dateWhere}`
+
+        let query =
+            "SELECT a.appointment_id, a.date_time, " +
+            "p.first_name AS patient_first_name, p.last_name AS patient_last_name, " +
+            "s.first_name AS doctor_first_name, s.last_name AS doctor_last_name, " +
+            "d.room_number " +
+            "FROM appointment a " +
+            "INNER JOIN patient p ON p.patient_id = a.patient_id " +
+            "INNER JOIN staff s ON s.staff_id = a.doctor_id " +
+            "INNER JOIN doctor d ON d.doctor_id = a.doctor_id "
+        if (whereClause.length !== 0) {
+            query += `WHERE ${whereClause}`
+            query = query.substring(0, query.length - 4)
+        }
+        // console.log(query)
+        try {
+            const [result] = await database.query(query)
+            return res.status(200).json({result})
+        } catch (err) {
+            console.error(err)
+            return res.status(500).json(err)
         }
     })
 

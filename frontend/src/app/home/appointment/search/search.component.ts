@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {Appointment} from "../../../interfaces/appointment";
+import {AppointmentService} from "../../../services/appointment.service";
+import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-search',
@@ -6,16 +9,33 @@ import { Component } from '@angular/core';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent {
-  public results = [
-    {
-      appointment_id: 1,
-      doctor_first_name: 'Ayca',
-      doctor_last_name: 'Cakmak',
-      room_number: 1005,
-      date_time: '2022-12-24 12:30:00'
-    }
-  ]
-  public displayColumns = [
+  public results: Appointment[] = []
+
+  constructor(private appointment: AppointmentService,
+              private fb: FormBuilder) {
+  }
+
+  searchForm = this.fb.group({
+    patient: this.fb.group({
+      first_name: '',
+      last_name: ''
+    }),
+    doctor: this.fb.group(
+      {
+        first_name: '',
+        last_name: ''
+      }
+    ),
+    date: ''
+  })
+
+  onSubmit(){
+    this.appointment.search(this.searchForm.value).subscribe({
+      next: appointments => this.results = appointments
+    })
+  }
+
+  public readonly displayColumns = [
     'appointment_id',
     'doctor',
     'room_number',
