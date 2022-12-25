@@ -6,6 +6,10 @@
     <form>
       <div class="form-group">
         <mat-form-field>
+          <mat-label>Staff ID</mat-label>
+          <input matInput type="number" [value]="user.staff_id" disabled>
+        </mat-form-field>
+        <mat-form-field>
           <mat-label>First Name</mat-label>
           <input matInput [value]="user.first_name" [disabled]="!isEditing">
         </mat-form-field>

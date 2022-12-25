@@ -18,16 +18,16 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     HomeComponent,
     IndexComponent
   ],
-    imports: [
-        CommonModule,
-        HomeRoutingModule,
-        MatToolbarModule,
-        MatSidenavModule,
-        MatButtonModule,
-        MatIconModule,
-        MatListModule,
-        MatCardModule,
-        MatTooltipModule
-    ]
+  imports: [
+    CommonModule,
+    HomeRoutingModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatListModule,
+    MatCardModule,
+    MatTooltipModule
+  ]
 })
 export class HomeModule { }

@@ -25,13 +25,13 @@ import {ReactiveFormsModule} from "@angular/forms";
     CommonModule,
     PatientRoutingModule,
     MatTabsModule,
+    ReactiveFormsModule,
     MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MatButtonModule,
     MatTableModule,
     MatIconModule,
-    ReactiveFormsModule
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
 })
 export class PatientModule {

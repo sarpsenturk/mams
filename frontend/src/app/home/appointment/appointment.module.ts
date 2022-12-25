@@ -7,14 +7,13 @@ import {CreateComponent} from './create/create.component';
 import {MatTabsModule} from "@angular/material/tabs";
 import {SearchComponent} from './search/search.component';
 import {MatInputModule} from "@angular/material/input";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
-import {MatTableModule} from "@angular/material/table";
-import {MatIconModule} from "@angular/material/icon";
-import {MatButtonModule} from "@angular/material/button";
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {ReactiveFormsModule} from "@angular/forms";
-import {MatSelectModule} from "@angular/material/select";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatIconModule} from "@angular/material/icon";
+import {MatTableModule} from "@angular/material/table";
+import {MatButtonModule} from "@angular/material/button";
+import {MatNativeDateModule} from "@angular/material/core";
 
 
 @NgModule({
@@ -28,14 +27,13 @@ import {MatSelectModule} from "@angular/material/select";
     AppointmentRoutingModule,
     MatTabsModule,
     MatInputModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTableModule,
     MatIconModule,
+    MatTableModule,
     MatButtonModule,
-    MatAutocompleteModule,
-    ReactiveFormsModule,
-    MatSelectModule
   ]
 })
 export class AppointmentModule {
