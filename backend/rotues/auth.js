@@ -28,20 +28,20 @@ export default (database) => {
         try {
             const {email, password} = req.body
             if (!email || !password) {
-                return res.status(400).json({err: "Missing required credentials"})
+                return res.status(400).json({msg: "Missing required credentials"})
             }
 
             // Find staff
             const staff = await getStaff(email)
             if (staff.length === 0) {
-                return res.status(401).json({err: "Invalid email or password"})
+                return res.status(401).json({msg: "Invalid email or password"})
             }
             const selectedStaff = staff[0]
 
             // Check password
             const passwordMatch = await bcrypt.compare(password, Buffer.from(selectedStaff.password).toString());
             if (!passwordMatch) {
-                return res.status(401).json({err: "Invalid email or password"})
+                return res.status(401).json({msg: "Invalid email or password"})
             }
 
             // Generate token

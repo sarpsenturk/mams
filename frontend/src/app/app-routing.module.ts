@@ -1,5 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {LoggedInGuard} from "./guards/logged-in.guard";
+import {NotLoggedInGuard} from "./guards/not-logged-in.guard";
 
 const routes: Routes = [
   {
@@ -8,7 +10,8 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
+    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+    canActivate: [LoggedInGuard],
   },
   {
     path: '',
@@ -19,7 +22,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [LoggedInGuard, NotLoggedInGuard]
 })
 export class AppRoutingModule {
 }

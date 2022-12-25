@@ -4,19 +4,23 @@
       <mat-card-title>Login to MAMS</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field class="full-width">
           <mat-label>Email</mat-label>
-          <input matInput type="email">
+          <input matInput type="email" formControlName="email">
+          <mat-error *ngIf="emailError">
+            {{emailError}}
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-label>Password</mat-label>
-          <input matInput type="password">
+          <input matInput type="password" formControlName="password">
         </mat-form-field>
+        <button mat-raised-button color="primary" class="full-width" type="submit">
+          Login
+        </button>
+        <mat-error *ngIf="loginError">{{loginError}}</mat-error>
       </form>
     </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" class="full-width">Login</button>
-    </mat-card-actions>
   </mat-card>
 </div>

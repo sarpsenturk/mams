@@ -4,6 +4,7 @@ import * as dotenv from "dotenv"
 dotenv.config()
 
 import express from 'express'
+import cors from 'cors'
 import mysql from "mysql2/promise"
 import api from "./rotues/api.js";
 
@@ -34,6 +35,7 @@ const db_pool = mysql.createPool({
 // Create the application
 const app = express()
 app.use(express.json())
+app.use(cors({origin: 'http://localhost:4200', credentials: true}))
 
 // Set up /api route
 app.use("/api", api(db_pool))

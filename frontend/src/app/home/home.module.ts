@@ -10,6 +10,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatListModule} from "@angular/material/list";
 import { IndexComponent } from './index/index.component';
 import {MatCardModule} from "@angular/material/card";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 
 @NgModule({
@@ -17,15 +18,16 @@ import {MatCardModule} from "@angular/material/card";
     HomeComponent,
     IndexComponent
   ],
-  imports: [
-    CommonModule,
-    HomeRoutingModule,
-    MatToolbarModule,
-    MatSidenavModule,
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatCardModule
-  ]
+    imports: [
+        CommonModule,
+        HomeRoutingModule,
+        MatToolbarModule,
+        MatSidenavModule,
+        MatButtonModule,
+        MatIconModule,
+        MatListModule,
+        MatCardModule,
+        MatTooltipModule
+    ]
 })
 export class HomeModule { }
